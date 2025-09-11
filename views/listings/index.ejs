@@ -1,0 +1,30 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+   <h3>All Listings</h3>
+   <!--<form method="GET" action="/listings/new">
+    <button>Craete new listing </button>
+   </form> --><!--moved this button to navbar.ejs-->
+   <br>
+   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1"><!--By palcing the card in this class , it will dispaly the cards in row,i.e in a row we can see
+      3 or more cards for large screen, 2 for medium size screen and 1 for small-->
+          <!--card and its styling from the bootstrap-->
+   <% for(let listing of allListings){ %>
+      <a href="/listings/<%=listing._id %>" class="listing-link"><!--entire crad div is placed inside anchor tag because when we click on the card it should go to show.ejs and show the details-->
+    <div class="card col" ><!--by including the col class for each row will have same number of cols-->
+  <img src="<%= listing.image %>" class="card-img-top" alt="listing_image" style="height: 20rem; object-fit: cover;"><!--object-fit:cover will help in covering the image in the given height and width-->
+  <div class="card-img-overlay"></div><!--This is used from bootstrap we can write anything on the image -->
+    <h5 class="card-title text-white bg-dark bg-opacity-50 p-2 rounded"><%= listing.location %>, <%= listing.country %></h5>
+  <div class="card-body">
+    <p class="card-text">
+    <b> <%= listing.title %></b>  <br>
+      &#8377; <%= listing.price.toLocaleString("en-IN") %> /night <br>
+    </p>
+  </div>
+</div>
+</a>
+   
+<% } %>
+   </div>
+  
+ 
+</body>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust</title>
+     <link rel="stylesheet" href="/css/style.css"> <!--linking css file, No need to include this in every views(like index.ejs,show.ejs).-->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+        <!--This is to include the compass icons in the navbar.Goto fontawesome cdn library copy the first link -->
+        
+</head>
+<body>
+    <%- include("../includes/navbar") %> <!--including navbar.ejs file here,No need to include this in every views(like index.ejs,show.ejs).-->
+    <!--The body part is different for different pages like index.ejs,show.ejs etc.So we will use body here-->
+    <div class="container"><%- body %></div> <!--this is where all other ejs files will be rendered,In this boilerplate body part will be given
+    to all other page.SO that's why we used -->
+    <%- include("../includes/footer") %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

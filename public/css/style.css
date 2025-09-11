@@ -1,0 +1,97 @@
+body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;/*imported from google fonts and applied to the entire body*/
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;/*to make the body take the entire height of the viewport*/
+}
+
+.container{ /*ocuupy entire width of the page
+    flex:1;/*to make the container take the remaining space between navbar and footer*/
+    margin-top:2rem;/*to provide space from the top*/
+    margin-bottom:2rem;/*to provide space from the bottom*/
+}
+/*Navbar*/
+.navbar{
+    height:5rem;/*height of the navbar*/
+    background-color:white;/*background color of the navbar,if it is not used then when we scroll the list it will overlapp with navbar*/
+}
+.fa-compass{  /*icon class and its styling*/
+    color:#fe424d;
+    font-size:2rem;
+}
+.nav-link{
+    color:#222222 !important;/*to override the bootstrap default color*/
+}
+/*footer*/
+.f-info-links a{
+    text-decoration: none;
+    color: #222222;
+}
+.f-info-links a:hover{
+    color: blue;
+    text-decoration: underline;
+}
+.f-info-links,.f-info-socials,.f-info-brand{
+    width:100%;
+    display:flex;
+     align-items: center;
+    justify-content: center;
+   
+}
+
+.f-info-socials i{
+    margin-right: 1rem; /*to provide space between the icons*/
+    font-size: 1.2rem;
+}
+.f-info{
+    height:8rem;
+    background-color: #ebebeb;
+    display:flex;
+    flex-wrap: wrap;
+    align-items: space-evenly;
+    justify-content: center;
+    text-align: center;
+}
+.card{
+    border:none !important;/*to remove the border of the card*/
+    margin-bottom: 2rem;/*to provide space between the cards*/
+}
+.card-img-top{
+    border-radius:1rem !important;/*to provide roundness to the image*/
+    width: 100% !important;
+    object-fit: cover !important;/*to cover the entire card*/
+}
+.card-body{
+    padding: 0 !important;/*to remove the padding of the card body and there will be no space between image and title*/
+}
+.card-text p{
+    font-weight: 400;
+}
+/*to remove the underline from the link in the listing page, This due  to we placed the card inside the anchor tag*/
+.listing-link{
+    text-decoration: none;
+
+}
+.card-img-overlay{
+    opacity:0;
+}
+.card-img-overlay:hover{ /*to provide effect when we hover on the image ,it will litely become white*/
+    opacity:0.2;
+     background-color:white;
+}
+ .add-btn,.edit-btn{
+    background-color:#fe424d !important;
+    color:black !important;
+    border:none !important;
+}    
+/*show page*/
+.show-img{
+   height: 30vh;
+}
+.btns{
+    display:flex;
+}
+.show-card{
+    padding-left: 0 !important;/*to remove the padding of the card body and there will be no space between image and title*/
+    padding-right: 0 !important;
+}
