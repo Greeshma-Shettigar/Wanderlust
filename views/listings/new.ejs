@@ -3,14 +3,15 @@
   <div class="col-8 offset-2"><!--offset-2 will provide margin from left side-->
    <br><br>
     <h3>Create a new listing</h3>
-    <form method="POST" action="/listings">
+    <form method="POST" action="/listings" nonvalidate class="needs-validation"><!--nonvalidate will disable the default html5 validation-->
+      <!--name attribute is very important as it will be used to access the data in req.body in app.js-->
         <div class="mb-3"> <!--mb-3 is a bootstrap class which will provide margin bottom to the div-->
         <label for="title"class="form-label">Title: </label>
-        <input name="listing[title]" placeholder="Enter title" type="text" class="form-control">
+        <input name="listing[title]" placeholder="Enter title" type="text" class="form-control" required> <!--required means that field is necessary we need to fill that field(title)-->
        </div>
        <div class="mb-3">
         <label for="description"class="form-label">Description </label>
-        <textarea name="listing[description]" placeholder="Enter description" class="form-control"></textarea>
+        <textarea name="listing[description]" placeholder="Enter description" class="form-control" required></textarea>
        </div>
        <div class="mb-3">
         <label for="image"class="form-label">Image Link: </label>
@@ -19,16 +20,16 @@
        <div class="row"><!--To make price nad country in a single row-->
        <div class="mb-3 col-md-4"><!--col-4 will make this div to take 4 cols out of 12 cols when its size is medium or large,for smll it will take entire columns-->
         <label for="price"class="form-label">Price: </label>
-        <input name="listing[price]" placeholder="Enter price" type="number" class="form-control">
+        <input name="listing[price]" placeholder="Enter price" type="number" class="form-control" required>
        </div>
        <div class="mb-3 col-md-8 "><!--col-8 will make this div to take 8 cols out of 12 cols for medium and large size-->
          <label for="country"class="form-label">Country: </label>
-        <input name="listing[country]" placeholder="Enter country" type="text" class="form-control">
+        <input name="listing[country]" placeholder="Enter country" type="text" class="form-control" required>
        </div>
        </div>
        <div class="mb-3">
         <label for="location"class="form-label">Location: </label>
-        <input name="listing[location]" placeholder="Enter location" type="text" class="form-control">
+        <input name="listing[location]" placeholder="Enter location" type="text" class="form-control" required>
        </div> 
         <br><br>
         <button class="btn btn-dark add-btn">Add</button>
