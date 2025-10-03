@@ -5,6 +5,9 @@ const Listing=require("./models/listing.js");
 const path=require("path");//for ejs
 const methodOverride=require("method-override");
 const ejsMate=require("ejs-mate");
+const wrapAsync=require("./utils/wrapasync");
+const ExpressError=require("./utils/ExpressError");
+
 //connect to database
 const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
 
@@ -31,7 +34,7 @@ app.get("/",(req,res)=>{
     res.send("Hi,I am root");
 });
 //index route
-app.get("/listings", async (req, res) => {
+app.get("/listings", wrapAsync(async (req, res) => {
     try {
         const allListings = await Listing.find({});
         res.render("listings/index", { allListings }); // ✅ No "/" before "listings/index"
@@ -39,7 +42,7 @@ app.get("/listings", async (req, res) => {
         console.error(err);
         res.status(500).send("Error fetching listings");
     }
-});
+}));
 //new route.This will only take us to form but it will not make changes to db.for that we need to create route.
 
 app.get("/listings/new",(req,res)=>{
@@ -47,43 +50,48 @@ app.get("/listings/new",(req,res)=>{
 });
 
 //show route
-app.get("/listings/:id",async (req,res)=>{
+app.get("/listings/:id",wrapAsync(async (req,res)=>{
    let {id}=req.params;
     const listing= await Listing.findById(id);//we will parse  this data to show.ejs
      res.render("listings/show.ejs",{listing});
-});
+}));
  //create route. This will send post request.from this we will make changes to db so we use async and await.
 //create route-this is reqired when we click on create new listing button it will show us a form, after filling the form and submitting it will make changes to db
-app.post("/listings",async(req,res)=>{
+app.post("/listings", 
+    wrapAsync(async(req,res,next)=>{
     //let {title,description,image,price,country,location}=req.body;
     //we can simplify above method by modifying new.ejs <input name="title" this to name="listing(title)"
     //here listing is the key and title is the value
-   const newListing= new Listing(req.body.listing); // create a new list
+  
+    const newListing= new Listing(req.body.listing); // create a new list
     await newListing.save();
     res.redirect("/listings");
-});
+
+    
+})
+);//after creating it will take us to index page which shows all listings
 //edit route
 //this will only take us to edit form but it will not make changes to db.for that we need to update route.
-app.get("/listings/:id/edit",async(req,res)=>{
+app.get("/listings/:id/edit",wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const listing= await Listing.findById(id);
     res.render("listings/edit",{listing});
-});
+}));
 
 //update route
-app.put("/listings/:id",async(req,res)=>{
+app.put("/listings/:id",wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const updatedListing=await Listing.findByIdAndUpdate(id,{...req.body.listing});//... is spread operator which will take all the properties of req.body.listing and put it in the object
     //we can also use req.body instead of req.body.listing but it is not a good practice as it may contain other properties which we don't want to update
     res.redirect(`/listings/${updatedListing._id}`);//after updating it will take us to show page of that listing
-});
+}));
 
 //delete route
-app.delete("/listings/:id",async(req,res)=>{
+app.delete("/listings/:id",wrapAsync(async(req,res)=>{
     let {id}=req.params;
     let deletedlisting= await Listing.findByIdAndDelete(id);
     res.redirect("/listings");
-});
+}));
 
 //app.get("/testListing",async (req,res)=>{
   //  let sampleListing=new Listing({
@@ -98,6 +106,19 @@ app.delete("/listings/:id",async(req,res)=>{
     //res.send("sucessful testing");
     
 //});
+
+app.all("*",(req,res,next)=>{
+   // res.status(404).send("Page Not Found");
+   next(new ExpressError(404,"Page Not Found"));
+});//this will handle all the routes which are not defined above
+//we are passing an instance of ExpressError to the next function
+//this will be caught by the error handling middleware below
+
+
+app.use((err,req,res,next)=>{         //this is error handling middleware
+    let {statusCode=500,message="Something went wrong"}=err;
+    res.status(statusCode).send(message);
+});
 app.listen(8080,()=>{
     console.log("server is listening to the port");
 });
