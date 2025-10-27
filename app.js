@@ -5,8 +5,8 @@ const Listing=require("./models/listing.js");
 const path=require("path");//for ejs
 const methodOverride=require("method-override");
 const ejsMate=require("ejs-mate");
-const wrapAsync=require("./utils/wrapasync");
-const ExpressError=require("./utils/ExpressError");
+const wrapAsync=require("./utils/wrapasync.js");
+const ExpressError=require("./utils/ExpressError.js");
 
 //connect to database
 const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
@@ -62,7 +62,9 @@ app.post("/listings",
     //let {title,description,image,price,country,location}=req.body;
     //we can simplify above method by modifying new.ejs <input name="title" this to name="listing(title)"
     //here listing is the key and title is the value
-  
+    if(!req.body.listing){
+        throw new ExpressError(400,"Invalid Listing Data",400);
+    }
     const newListing= new Listing(req.body.listing); // create a new list
     await newListing.save();
     res.redirect("/listings");
@@ -107,17 +109,19 @@ app.delete("/listings/:id",wrapAsync(async(req,res)=>{
     
 //});
 
-app.all("*",(req,res,next)=>{
-   // res.status(404).send("Page Not Found");
-   next(new ExpressError(404,"Page Not Found"));
-});//this will handle all the routes which are not defined above
+app.use((err,req, res, next) => {
+    let {statusCode=500, message="something went wrong"}=err;
+    res.status(statusCode).send(message);
+});
+//this will handle all the routes which are not defined above
 //we are passing an instance of ExpressError to the next function
 //this will be caught by the error handling middleware below
 
 
 app.use((err,req,res,next)=>{         //this is error handling middleware
     let {statusCode=500,message="Something went wrong"}=err;
-    res.status(statusCode).send(message);
+    res.render("error.ejs");
+   // res.status(statusCode).send(message);
 });
 app.listen(8080,()=>{
     console.log("server is listening to the port");
