@@ -7,6 +7,7 @@ const methodOverride=require("method-override");
 const ejsMate=require("ejs-mate");
 const wrapAsync=require("./utils/wrapasync.js");
 const ExpressError=require("./utils/ExpressError.js");
+const { listingSchema } = require("./schema.js");//importing joi schema for validation from schema.js
 
 //connect to database
 const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
@@ -62,9 +63,11 @@ app.post("/listings",
     //let {title,description,image,price,country,location}=req.body;
     //we can simplify above method by modifying new.ejs <input name="title" this to name="listing(title)"
     //here listing is the key and title is the value
-    if(!req.body.listing){
-        throw new ExpressError(400,"Invalid Listing Data",400);
-    }
+   let result=listingSchema.validate(req.body);//validating the data using joi schema
+   console.log(result);
+   if(result.error){
+    throw new ExpressError(400,result.error);//400 is bad request
+   }
     const newListing= new Listing(req.body.listing); // create a new list
     await newListing.save();
     res.redirect("/listings");
@@ -118,11 +121,11 @@ app.use((err,req, res, next) => {
 //this will be caught by the error handling middleware below
 
 
-app.use((err,req,res,next)=>{         //this is error handling middleware
-    let {statusCode=500,message="Something went wrong"}=err;
-    res.render("error.ejs");
-   // res.status(statusCode).send(message);
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message = "Something went wrong" } = err;
+  res.status(statusCode).render("error.ejs", { err });
 });
+
 app.listen(8080,()=>{
     console.log("server is listening to the port");
 });
